@@ -15,18 +15,20 @@ void merge(vector<int> &numbs, int l, int m, int r)
 	for (int i = l; i <= m; ++i) {
 		left.push_back(numbs[i]);
 	}
-	left.push_back(INT_MAX);
 
 	vector<int> right;
 	for (int i = m + 1; i <= r; ++i) {
 		right.push_back(numbs[i]);
 	}
-	right.push_back(INT_MAX);
 
 	int i = 0;
 	int j = 0;
+	int k;
 
-	for (int k = l; k <= r; ++k) {
+	for (k = l; k <= r; ++k) {
+		if (i >= left.size() || j >= right.size())
+			break;
+
 		if (left[i] <= right[j]) {
 			numbs[k] = left[i];
 			i++;
@@ -35,6 +37,23 @@ void merge(vector<int> &numbs, int l, int m, int r)
 			numbs[k] = right[j];
 			j++;
 		}
+	}
+
+	vector<int> *pRemain;
+	int nRemainStartP;
+	if (i >= left.size())
+	{
+		pRemain = &right;
+		nRemainStartP = j;
+	}
+	else
+	{
+		pRemain = &left;
+		nRemainStartP = i;
+	}
+
+	for (; k <= r; ++k) {
+		numbs[k] = pRemain->at(nRemainStartP++);
 	}
 }
 
